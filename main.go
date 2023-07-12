@@ -1,12 +1,13 @@
 package main
 
 import (
-	"github.com/go-chi/chi"
-	"github.com/go-chi/cors"
-	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/go-chi/chi"
+	"github.com/go-chi/cors"
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -25,10 +26,10 @@ func main() {
 	}))
 
 	v1Router := chi.NewRouter()
-
+	v1Router.Get("/healthz", handlerReadiness)
+	v1Router.Get("/err", handlerError)
 	// 添加一个路由组，所有的路由都是以 /v1 为前缀
 	router.Mount("/v1", v1Router)
-	v1Router.HandleFunc("/ready", handlerReadiness)
 	server := &http.Server{
 		Handler: router,
 		Addr:    ":" + portString,
