@@ -31,7 +31,6 @@ type Feed struct {
 	Url       string `json:"url"`
 	UserID    uuid.UUID `json:"user_id"`
 }
-
 func databaseFeedToFeed(dbFeed database.Feed) Feed{
 	return Feed{
 		ID:        dbFeed.ID,
@@ -41,4 +40,19 @@ func databaseFeedToFeed(dbFeed database.Feed) Feed{
 		Url:       dbFeed.Url,
 		UserID:    dbFeed.UserID,
 	}
+}
+
+func databaseFeedsToFeeds(dbFeed []database.Feed) []Feed{
+	feeds := make([]Feed, len(dbFeed))
+	for i, feed := range dbFeed {
+		feeds[i] = Feed{
+			ID:        feed.ID,
+			CreatedAt: feed.CreatedAt,
+			UpdatedAt: feed.UpdatedAt,
+			Name:      feed.Name,
+			Url:       feed.Url,
+			UserID:    feed.UserID,
+		}
+	}
+	return feeds
 }

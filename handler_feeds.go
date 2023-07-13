@@ -41,3 +41,13 @@ func (apiCfg *apiConfig)handlerCreateFeed(w http.ResponseWriter, r *http.Request
 	}
 	responseWithJSON(w, http.StatusOK, databaseFeedToFeed(feed))
 }
+func (apiCfg *apiConfig)handlerGetFeeds(w http.ResponseWriter, r *http.Request) {
+	
+	// 调用数据库接口
+	feeds, err := apiCfg.DB.GetFeeds(r.Context())
+	if err != nil {
+		responseWithError(w, http.StatusBadRequest, fmt.Sprintf("Can not create feed: %v", err))
+		return
+	}
+	responseWithJSON(w, http.StatusOK, databaseFeedsToFeeds(feeds))
+}

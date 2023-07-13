@@ -54,6 +54,7 @@ func main() {
 	v1Router.Post("/users", apiCfg.handlerCreateUser)
 	v1Router.Get("/users", apiCfg.middlewareAuth(apiCfg.handlerGetUser))
 	v1Router.Post("/feeds", apiCfg.middlewareAuth(apiCfg.handlerCreateFeed))
+	v1Router.Get("/feeds", apiCfg.handlerGetFeeds)
 	// 添加一个路由组，所有的路由都是以 /v1 为前缀
 	router.Mount("/v1", v1Router)
 	server := &http.Server{
