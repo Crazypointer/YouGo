@@ -14,6 +14,24 @@ type User struct {
 	ApiKey    string   `json:"api_key"`
 }
 
+
+type Feed struct {
+	ID        uuid.UUID `json:"id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Name      string  `json:"name"`
+	Url       string `json:"url"`
+	UserID    uuid.UUID `json:"user_id"`
+}
+
+type FeedFollow struct {
+	ID        uuid.UUID `json:"id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	UserID    uuid.UUID `json:"user_id"`
+	FeedID    uuid.UUID `json:"feed_id"`
+}
+
 func databaseUserToUser(dbUser database.User) User{
 	return User{
 		ID:        dbUser.ID,
@@ -22,14 +40,6 @@ func databaseUserToUser(dbUser database.User) User{
 		Name:      dbUser.Name,
 		ApiKey:   dbUser.ApiKey,
 	}
-}
-type Feed struct {
-	ID        uuid.UUID `json:"id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	Name      string  `json:"name"`
-	Url       string `json:"url"`
-	UserID    uuid.UUID `json:"user_id"`
 }
 func databaseFeedToFeed(dbFeed database.Feed) Feed{
 	return Feed{
@@ -43,16 +53,26 @@ func databaseFeedToFeed(dbFeed database.Feed) Feed{
 }
 
 func databaseFeedsToFeeds(dbFeed []database.Feed) []Feed{
-	feeds := make([]Feed, len(dbFeed))
-	for i, feed := range dbFeed {
-		feeds[i] = Feed{
-			ID:        feed.ID,
-			CreatedAt: feed.CreatedAt,
-			UpdatedAt: feed.UpdatedAt,
-			Name:      feed.Name,
-			Url:       feed.Url,
-			UserID:    feed.UserID,
-		}
+	feeds := make([]Feed, 0)
+	for _, feed := range dbFeed {
+		feeds = append(feeds, databaseFeedToFeed(feed))
 	}
 	return feeds
+}
+
+func databaseFeedFollowToFeedFollow(dbFeedFollw database.FeedFollow) FeedFollow{
+	return FeedFollow{
+		ID:        dbFeedFollw.ID,
+		CreatedAt: dbFeedFollw.CreatedAt,
+		UpdatedAt: dbFeedFollw.UpdatedAt,
+		UserID:    dbFeedFollw.UserID,
+		FeedID:    dbFeedFollw.FeedID,
+	}
+}
+func databaseFeedFollowsToFeedFollows(dbFeedFollw []database.FeedFollow) []FeedFollow{
+	feedFollows := make([]FeedFollow, 0)
+	for _, feedFollow := range dbFeedFollw {
+		feedFollows = append(feedFollows, databaseFeedFollowToFeedFollow(feedFollow))
+	}
+	return feedFollows
 }
